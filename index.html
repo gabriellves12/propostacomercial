@@ -133,6 +133,23 @@
   @keyframes scrollLine { 0%,100% { transform: scaleX(0.3); opacity: 0.4; } 50% { transform: scaleX(1); opacity: 1; } }
 
   /* =====================================================
+     MARQUEE de logos (início)
+     ===================================================== */
+  .marquee { padding-block: 46px; background: var(--tb-surface-page); border-bottom: 1px solid var(--tb-border-subtle); overflow: hidden; }
+  .marquee__label { text-align: center; font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--tb-text-muted); font-weight: var(--tb-font-weight-semibold); margin-bottom: 30px; }
+  .marquee__viewport {
+    position: relative; overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+  .marquee__track { display: flex; align-items: center; gap: 80px; width: max-content; animation: marquee 34s linear infinite; }
+  .marquee:hover .marquee__track { animation-play-state: paused; }
+  .marquee__track img { height: 30px; width: auto; opacity: 0.4; filter: grayscale(1); transition: opacity 0.35s ease, filter 0.35s ease; }
+  .marquee__track img:hover { opacity: 1; filter: grayscale(0); }
+  @keyframes marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
+
+  /* =====================================================
      INTRO
      ===================================================== */
   .intro__lead {
@@ -338,12 +355,20 @@
   /* =====================================================
      SOBRE NÓS
      ===================================================== */
-  .about { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: start; }
-  .about__title { font-size: clamp(34px, 5.2vw, 66px); line-height: 1.0; letter-spacing: -0.03em; font-weight: var(--tb-font-weight-semibold); margin-top: 26px; }
-  .about__founders { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--tb-border-subtle); color: var(--tb-text-primary); font-weight: var(--tb-font-weight-medium); font-size: 16px; max-width: 320px; }
-  .about__text p { color: var(--tb-text-secondary); font-weight: var(--tb-font-weight-light); font-size: clamp(16px, 1.5vw, 18.5px); line-height: 1.75; }
-  .about__text p + p { margin-top: 22px; }
-  @media (max-width: 760px) { .about { grid-template-columns: 1fr; gap: 28px; } }
+  .about { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 60px; align-items: stretch; }
+  .about__title { font-size: clamp(32px, 4.8vw, 58px); line-height: 1.02; letter-spacing: -0.03em; font-weight: var(--tb-font-weight-semibold); margin-top: 26px; }
+  .about__text { margin-top: 28px; }
+  .about__text p { color: var(--tb-text-secondary); font-weight: var(--tb-font-weight-light); font-size: clamp(16px, 1.5vw, 18px); line-height: 1.75; }
+  .about__text p + p { margin-top: 18px; }
+  .about__founders { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--tb-border-subtle); color: var(--tb-text-primary); font-weight: var(--tb-font-weight-medium); font-size: 16px; }
+  .about__media {
+    position: relative; min-height: 380px; border-radius: var(--tb-radius-xl); overflow: hidden;
+    background: var(--tb-surface-sunken); border: 1px solid var(--tb-border-subtle);
+    display: grid; place-items: center;
+  }
+  .about__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .about__media-ph { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tb-text-muted); border: 1px dashed var(--tb-border-strong); padding: 14px 24px; border-radius: var(--tb-radius-full); }
+  @media (max-width: 760px) { .about { grid-template-columns: 1fr; gap: 32px; } .about__media { min-height: 280px; } }
 
   .footer { background: var(--tb-brand-black); color: var(--tb-text-inverse); position: relative; overflow: hidden; }
   .footer__cta { padding-block: clamp(70px, 10vw, 130px); border-bottom: 1px solid rgba(255,255,255,0.08); }
@@ -433,6 +458,14 @@
       <span class="line"></span> Role para ver sua proposta
     </div>
   </header>
+
+  <!-- ================= MARQUEE LOGOS ================= -->
+  <section class="marquee" id="marquee" hidden>
+    <p class="marquee__label" data-bind="marqueeLabel">Marcas com quem já atuamos</p>
+    <div class="marquee__viewport">
+      <div class="marquee__track" id="marqueeTrack"></div>
+    </div>
+  </section>
 
   <main>
     <!-- ================= ESCOPO ================= -->
@@ -557,9 +590,12 @@
         <div class="about__intro">
           <span class="eyebrow reveal"><span class="idx">06</span> &nbsp;Sobre nós</span>
           <h2 class="about__title reveal" data-d="1" data-bind="sobreTitulo">Somos a Think Brand.</h2>
-          <p class="about__founders reveal" data-d="2" data-bind="sobreFundadores"></p>
+          <div class="about__text reveal" data-d="2" data-list="sobreTexto"></div>
+          <p class="about__founders reveal" data-d="3" data-bind="sobreFundadores"></p>
         </div>
-        <div class="about__text reveal" data-d="2" data-list="sobreTexto"></div>
+        <figure class="about__media reveal" data-d="2" id="aboutMedia">
+          <span class="about__media-ph">Espaço para imagem</span>
+        </figure>
       </div>
     </section>
   </main>
@@ -595,6 +631,15 @@ const PROPOSTA = {
   data:        "10 Jun 2026",
 
   intro: "Nesta proposta você encontra todo o escopo do seu projeto, valores, prazos e exemplos do nosso trabalho — tudo pensado sob medida para o seu negócio.",
+
+  // ===== Marquee de logos (início da página) =====
+  marqueeLabel: "Marcas com quem já atuamos",
+  logos: [
+    { src: "./logo02.svg", alt: "Think Brand" },
+    // 👉 Coloque os arquivos das logos das empresas nesta pasta e referencie aqui:
+    // { src: "./logo-empresa1.svg", alt: "Empresa 1" },
+    // { src: "./logo-empresa2.png", alt: "Empresa 2" },
+  ],
 
   // ===== 01 · Escopo =====
   escopo: [
@@ -653,6 +698,7 @@ const PROPOSTA = {
 
   // ===== Sobre nós (final da página) =====
   sobreTitulo:     "Somos a Think Brand.",
+  sobreImagem:     "",   // 👉 ex: "./sobre-thinkbrand.jpg" — imagem que aparece à direita
   sobreFundadores: "Fundada por Gabriel Alves e Riquelme Roniere.",
   sobreTexto: [
     "A Think Brand nasceu para transformar negócios em marcas memoráveis. Unimos estratégia, design e tecnologia para criar experiências digitais que não apenas impressionam — convertem. Cada projeto é tratado como único, pensado do conceito à entrega para refletir a essência e os objetivos de quem confia no nosso trabalho.",
@@ -733,6 +779,23 @@ const PROPOSTA = {
     const host = document.querySelector(`[data-list="${key}"]`);
     if (host && Array.isArray(PROPOSTA[key])) host.innerHTML = render(PROPOSTA[key]);
   });
+
+  // ---- Marquee de logos (repete pra preencher + duplica pra loop contínuo) ----
+  const track = document.getElementById("marqueeTrack");
+  const marquee = document.getElementById("marquee");
+  if (track && Array.isArray(PROPOSTA.logos) && PROPOSTA.logos.length) {
+    let filled = [];
+    while (filled.length < 8) filled = filled.concat(PROPOSTA.logos);
+    const set = filled.map(l => `<img src="${esc(l.src)}" alt="${esc(l.alt || "")}" />`).join("");
+    track.innerHTML = set + set; // duas cópias → translateX(-50%) sem emenda
+    marquee.hidden = false;
+  }
+
+  // ---- Imagem do "Sobre nós" (à direita) ----
+  const media = document.getElementById("aboutMedia");
+  if (media && PROPOSTA.sobreImagem) {
+    media.innerHTML = `<img src="${esc(PROPOSTA.sobreImagem)}" alt="Sobre a Think Brand" />`;
+  }
 
   // ---- Reveal on scroll ----
   const io = new IntersectionObserver((entries) => {
