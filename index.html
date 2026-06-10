@@ -246,7 +246,12 @@
   .price-card__value { margin-top: 18px; font-size: clamp(48px, 7vw, 84px); font-weight: var(--tb-font-weight-bold); letter-spacing: -0.04em; line-height: 0.95; }
   .price-card__value small { font-size: 0.42em; font-weight: var(--tb-font-weight-light); color: rgba(255,255,255,0.6); letter-spacing: 0; }
   .price-card__sub { margin-top: 14px; color: rgba(255,255,255,0.65); font-weight: var(--tb-font-weight-light); font-size: 16px; }
-  .price-card__rows { margin-top: 36px; display: grid; gap: 1px; background: rgba(255,255,255,0.12); border-radius: var(--tb-radius-md); overflow: hidden; }
+  .price-incl { margin-top: 26px; }
+  .price-incl__label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: var(--tb-font-weight-semibold); }
+  .price-incl__list { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
+  .price-incl__list li { font-size: 13px; padding: 7px 13px 7px 11px; border: 1px solid rgba(255,255,255,0.16); border-radius: var(--tb-radius-full); color: rgba(255,255,255,0.85); display: inline-flex; align-items: center; gap: 7px; }
+  .price-incl__list li svg { width: 13px; height: 13px; opacity: 0.7; flex-shrink: 0; }
+  .price-card__rows { margin-top: 30px; display: grid; gap: 1px; background: rgba(255,255,255,0.12); border-radius: var(--tb-radius-md); overflow: hidden; }
   .price-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; background: rgba(20,20,20,0.55); }
   .price-row span:first-child { color: rgba(255,255,255,0.7); font-weight: var(--tb-font-weight-light); font-size: 14.5px; }
   .price-row span:last-child { font-weight: var(--tb-font-weight-semibold); font-size: 15px; }
@@ -486,6 +491,10 @@
             <p class="price-card__label">Valor do projeto</p>
             <p class="price-card__value"><small>R$&nbsp;</small><span data-bind="valorTotal">10.000</span></p>
             <p class="price-card__sub" data-bind="valorSub"></p>
+            <div class="price-incl">
+              <span class="price-incl__label">Inclui</span>
+              <ul class="price-incl__list" data-list="inclui"></ul>
+            </div>
           </div>
           <div class="price-card__rows" data-list="condicoes"></div>
         </div>
@@ -583,15 +592,18 @@ const PROPOSTA = {
   prazoNota:    "Prazo total estimado para a entrega completa do projeto, da concepção ao lançamento.",
 
   // ===== 04 · Valores =====
-  valorTotal: "10.000,00",
-  valorSub:   "Investimento único, com condições flexíveis de pagamento.",
+  valorTotal: "9.000,00",
+  valorSub:   "Site completo + painel administrativo para você atualizar os produtos sozinho.",
+  inclui: [
+    "Home", "Sobre nós", "Produtos", "Assistência técnica", "Contato", "Painel administrativo",
+  ],
   condicoes: [
-    { label: "À vista",     valor: "R$ 10.000,00" },
-    { label: "Parcelado",   valor: "6x de R$ 0.000,00" },
+    { label: "À vista",     valor: "R$ 9.000,00" },
+    { label: "Parcelado",   valor: "6x de R$ 1.500,00" },
   ],
   pixDesconto: "10%",
-  pixDesc:     "Pagamento via Pix com 10% de desconto sobre o valor total do projeto.",
-  cartaoDesc:  "Parcele em até 6x no cartão de crédito, sem complicação.",
+  pixDesc:     "Pagamento via Pix com 10% de desconto — R$ 8.100,00 à vista.",
+  cartaoDesc:  "Parcele em até 6x de R$ 1.500,00 no cartão de crédito, sem complicação.",
 
   // ===== Overdelivery =====
   overNum:     "2",
@@ -664,6 +676,10 @@ const PROPOSTA = {
 
     condicoes: (arr) => arr.map(it => `
       <div class="price-row"><span>${esc(it.label)}</span><span>${esc(it.valor)}</span></div>
+    `).join(""),
+
+    inclui: (arr) => arr.map(it => `
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>${esc(it)}</li>
     `).join(""),
 
     projetos: (arr) => arr.length ? arr.map((it, i) => `
