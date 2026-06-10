@@ -17,8 +17,8 @@
 <meta name="twitter:card" content="summary_large_image" />
 
 <!-- Performance: pré-carrega os pesos da fonte usados na primeira dobra -->
-<link rel="preload" as="font" type="font/ttf" href="./fonte/GoogleSansFlex_36pt-Black.ttf" crossorigin />
-<link rel="preload" as="font" type="font/ttf" href="./fonte/GoogleSansFlex_36pt-Thin.ttf" crossorigin />
+<link rel="preload" as="font" type="font/ttf" href="./fonte/GoogleSansFlex_36pt-Regular.ttf" crossorigin />
+<link rel="preload" as="font" type="font/ttf" href="./fonte/GoogleSansFlex_36pt-SemiBold.ttf" crossorigin />
 
 <link rel="stylesheet" href="./tokens.css" />
 
@@ -30,6 +30,20 @@
      ========================================================= -->
 
 <style>
+  /* ===== Pesos: a página usa SOMENTE regular (400) e semibold (600) =====
+     Redefine os tokens de peso → leves caem em 400, fortes em 600. */
+  :root {
+    --tb-font-weight-thin:        400;
+    --tb-font-weight-extralight:  400;
+    --tb-font-weight-light:       400;
+    --tb-font-weight-regular:     400;
+    --tb-font-weight-medium:      600;
+    --tb-font-weight-semibold:    600;
+    --tb-font-weight-bold:        600;
+    --tb-font-weight-extrabold:   600;
+    --tb-font-weight-black:       600;
+  }
+
   /* ===== Reset ===== */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
