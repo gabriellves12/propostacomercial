@@ -335,6 +335,16 @@
   /* =====================================================
      FOOTER / CTA
      ===================================================== */
+  /* =====================================================
+     SOBRE NÓS
+     ===================================================== */
+  .about { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 64px; align-items: start; }
+  .about__title { font-size: clamp(34px, 5.2vw, 66px); line-height: 1.0; letter-spacing: -0.03em; font-weight: var(--tb-font-weight-semibold); margin-top: 26px; }
+  .about__founders { margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--tb-border-subtle); color: var(--tb-text-primary); font-weight: var(--tb-font-weight-medium); font-size: 16px; max-width: 320px; }
+  .about__text p { color: var(--tb-text-secondary); font-weight: var(--tb-font-weight-light); font-size: clamp(16px, 1.5vw, 18.5px); line-height: 1.75; }
+  .about__text p + p { margin-top: 22px; }
+  @media (max-width: 760px) { .about { grid-template-columns: 1fr; gap: 28px; } }
+
   .footer { background: var(--tb-brand-black); color: var(--tb-text-inverse); position: relative; overflow: hidden; }
   .footer__cta { padding-block: clamp(70px, 10vw, 130px); border-bottom: 1px solid rgba(255,255,255,0.08); }
   .footer__cta h2 { font-size: clamp(34px, 6vw, 80px); line-height: 1.0; letter-spacing: -0.035em; font-weight: var(--tb-font-weight-medium); max-width: 14ch; }
@@ -540,6 +550,18 @@
       </div>
       <div class="projects-grid" data-list="projetos"></div>
     </section>
+
+    <!-- ================= SOBRE NÓS ================= -->
+    <section class="section wrap" id="sobre">
+      <div class="about">
+        <div class="about__intro">
+          <span class="eyebrow reveal"><span class="idx">06</span> &nbsp;Sobre nós</span>
+          <h2 class="about__title reveal" data-d="1" data-bind="sobreTitulo">Somos a Think Brand.</h2>
+          <p class="about__founders reveal" data-d="2" data-bind="sobreFundadores"></p>
+        </div>
+        <div class="about__text reveal" data-d="2" data-list="sobreTexto"></div>
+      </div>
+    </section>
   </main>
 
   <!-- ================= FOOTER ================= -->
@@ -599,11 +621,11 @@ const PROPOSTA = {
   ],
   condicoes: [
     { label: "À vista",     valor: "R$ 9.000,00" },
-    { label: "Parcelado",   valor: "6x de R$ 1.500,00" },
+    { label: "No cartão",   valor: "Parcelas a consultar" },
   ],
   pixDesconto: "10%",
   pixDesc:     "Pagamento via Pix com 10% de desconto — R$ 8.100,00 à vista.",
-  cartaoDesc:  "Parcele em até 6x de R$ 1.500,00 no cartão de crédito, sem complicação.",
+  cartaoDesc:  "Quantidade de parcelas a consultar com os vendedores.",
 
   // ===== Overdelivery =====
   overNum:     "2",
@@ -623,11 +645,19 @@ const PROPOSTA = {
   ctaSecundario:    "Tirar dúvidas",
   ctaSecundarioHref:"https://wa.me/5584998982543?text=" + encodeURIComponent("Olá! Sou da OFT Group e tenho algumas dúvidas sobre a proposta."),
   contatos: [
-    { label: "contato@thinkbrand.com", href: "mailto:contato@thinkbrand.com" },
-    { label: "Instagram",              href: "https://instagram.com/" },
-    { label: "WhatsApp",               href: "https://wa.me/5584998982543" },
+    { label: "@thinkbrandsgn",   href: "https://www.instagram.com/thinkbrandsgn/" },
+    { label: "@gabrielalvesdz",  href: "https://www.instagram.com/gabrielalvesdz/" },
+    { label: "WhatsApp",         href: "https://wa.me/5584998982543" },
   ],
   ano: "2026",
+
+  // ===== Sobre nós (final da página) =====
+  sobreTitulo:     "Somos a Think Brand.",
+  sobreFundadores: "Fundada por Gabriel Alves e Riquelme Roniere.",
+  sobreTexto: [
+    "A Think Brand nasceu para transformar negócios em marcas memoráveis. Unimos estratégia, design e tecnologia para criar experiências digitais que não apenas impressionam — convertem. Cada projeto é tratado como único, pensado do conceito à entrega para refletir a essência e os objetivos de quem confia no nosso trabalho.",
+    "Combinamos visão criativa e excelência técnica para entregar resultados reais: mais autoridade, mais presença digital e mais vendas. Acreditamos que uma marca bem construída é o maior ativo de um negócio — e é exatamente isso que entregamos em cada detalhe.",
+  ],
 };
 
 /* =========================================================
@@ -681,6 +711,8 @@ const PROPOSTA = {
     inclui: (arr) => arr.map(it => `
       <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>${esc(it)}</li>
     `).join(""),
+
+    sobreTexto: (arr) => arr.map(t => `<p>${esc(t)}</p>`).join(""),
 
     projetos: (arr) => arr.length ? arr.map((it, i) => `
       <a class="project-card reveal" data-d="${Math.min(i+1,4)}" href="${esc(it.href||"#")}" target="_blank" rel="noopener">
